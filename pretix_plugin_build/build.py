@@ -9,5 +9,13 @@ npm_installed = False
 
 class CustomBuild(build):
     def run(self):
-        management.call_command('compilemessages', verbosity=1)
+        locale_found = False
+        for dirpath, dirnames, filenames in os.walk('.', topdown=True):
+            for dirname in dirnames:
+                if dirname == 'locale':
+                    locale_found = True
+                    break
+
+        if locale_found:
+            management.call_command('compilemessages', verbosity=1)
         build.run(self)
